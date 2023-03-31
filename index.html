@@ -1,0 +1,1281 @@
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Personal Game Emulators for Browser</title>
+<meta name="description" content="This app is a online emulator of Nintendo, Super Nintendo, Sega, GameBoy, GameBoy Color, GameBoy Advance, MAME32, and DOS Game. Open a ROM file from your computer, URL or from Google Drive, and Play the game directly in your browser. ">
+<meta name="keywords" content="online game emulator, nintendo emulator, super nintendo emulator, sega emulator, gameboy emulator, online mame, mame32 emulator, dos game emulator, nes emulator, smc emulator, gen emulator, gb emulator, gbc emulator, gba emulator, html5 game emulator, game emulator for google drive">		
+
+<meta property="og:title" content="Personal Game Emulators for Browser"> 
+<meta property="og:description" content="This app is a online emulator of Nintendo, Super Nintendo, Sega, GameBoy, GameBoy Color, GameBoy Advance, MAME32, and DOS Game. Open a ROM file from your computer, URL or from Google Drive, and Play the game directly in your browser. ">
+<meta property="og:type" content="website">
+<meta property="og:url" content="//youfiles.herokuapp.com/emulator/">
+<meta property="og:image" content="//youfiles.herokuapp.com/emulator/img/logo128.png">
+
+<link rel="shortcut icon" href="./favicon.ico">
+<style>
+*{
+	font-size:14px;
+    font-family: Arial, Helvetica, sans-serif; /*Trebuchet MS, Tahoma, Verdana*/
+}
+body{
+	/*background: #e3e3e3;*/
+}
+/*#maintable{
+	background-color: white;
+}*/
+.divopt{
+	/*-webkit-box-shadow: 0 0 10px #999;
+	-moz-box-shadow: 0 0 10px #999;
+	box-shadow: 0 0 10px #999;
+	border: 1px solid transparent;*/	
+}
+
+A:link    {color:#0860A8;text-decoration:none;}
+A:visited {color:#0860A8;text-decoration:none;}
+A:active  {color:#0860A8;text-decoration:underline;}
+A:hover  {color:#0860A8;text-decoration:underline;}
+
+.head1{
+	font-size:19px;
+	font-weight:bold;
+}
+.head2{
+	font-size:16px;
+	font-weight:bold;
+	color:green;
+}
+.headdesc{
+	/*font-weight:bold;*/
+	color:green;
+}
+.nav{
+	font-size:18px;
+	margin-right:3px;
+}
+.hover { border: 5px dashed #333; }
+</style>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="js/common.js" type="text/javascript"></script>
+<script src="//iblogbox.github.io/js/zip/jsziptools.js?t=2"></script>
+
+<script>
+var gadb=false;
+window.URL=window.URL || window.webkitURL;
+</script>
+</head>
+<body>
+
+<table align=center>
+<tr><td height=5>
+<tr><td align=center>
+	<a href="./" title="Go Home" class="toptitle" style="color:#2F7566"><span style="font-size:30px;font-family:Verdana, Arial">Personal Game Emulators for Browser</span></a>
+<tr><td height=9>
+</table>
+
+<table id="maintable" width=860 align=center class="divopt" style="padding:7px 12px 7px 12px;border:1px solid black;">
+
+<tr><td align=center>
+<div style="margin-top:2px">
+<script type="text/javascript">
+    google_ad_client = "ca-pub-1113541014872557";
+    google_ad_slot = "8968023564";
+    google_ad_width = 728;
+    google_ad_height = 90;
+</script>
+</div>
+
+<tr><td>
+<table align=center>
+<tr><td>
+This app is an online emulator of Nintendo, Super Nintendo, Sega, GameBoy, GameBoy Color, GameBoy Advance, MAME32, and DOS Game.
+Open a ROM file from your computer, URL or from Google Drive, and Play the game directly in your browser.<br>
+Provides connect with Google Drive. You can open a ROM file from Google Drive directly.<br>
+<font color=green>Supported ROM formats: NES(nes), SNES(smc, sfc, srm), SEGA(gen, bin, smd, md), GAMEBOY/COLOR/ADVANCE(gb, gbc, gba), Zipped ROM file(zip), MAME32 Zip file, DOS Game Zip file.</font>
+Mame32 emulator does not support some games.<br>
+Max file size: 80M, URL: 30M,  Supports only the latest browsers.
+
+</table>
+
+<tr><td align=center>
+
+
+<div id="divopen" style="margin-top:0px;margin-bottom:1px">
+<table><tr>
+<td><button type=button id='btn_open' onclick="gd_open_picker()" title="Open a ROM, ZIP file from Google Drive" style="font-size:15px"><img src="images/gdrive/product16.png" width=16 align="absmiddle"> Open a ROM file from Google Drive</button>
+<td>
+<td><div id="dfile1" style="display:inline"></div>
+<script>document.getElementById("dfile1").innerHTML='<input type="file" id="fileload1" name="files[]" style="width:200px">';</script>
+<td>
+<td><button type=button onclick='proc_openurl()' style="font-size:15px">Open a ROM file from URL</button>
+</table>
+</div>
+<div id="downlink" style="height:18px;margin-bottom:7px">Open a ROM, ZIP file from local computer and Google Drive. Drop a ROM, ZIP file on this page.</div>
+<div id="msg1" style="width:650px;white-space:nowrap;overflow:hidden;border:0px solid red;"></div>
+
+<table style='white-space:nowrap;'><tr>
+<td><select onchange="proc_sample(this)" style="width:170px">
+<option value="">*Load Sample File
+<option value="sample.nes">sample.nes
+<option value="sample.gen">sample.gen
+<option value="sample_tetris.zip">sample_dos_game.zip (tetris)
+<option value="qb11.zip">QBasic, GW-Basic (DOS)
+<option value="QB45.zip">QuickBasic 4.5 (DOS)
+<option value="pang.zip">pang.zip (MAME)
+</select>
+<td>
+<td><button type=button id="btn_full" onclick='proc_full()' style="font-size:13px" title="View full screen" disabled=true>FullScreen</button>
+<td><button type=button id="btn_refresh" disabled=true onclick='proc_refresh()' style="font-size:13px" title="Refresh Emulator">Refresh</button>
+<td><button type=button id="btn_close" disabled=true onclick='proc_close()' style="font-size:13px" title="Close Emulator">Close</button>
+<td>
+<td><div id='vphistory'></div>
+</table>
+
+<table style="white-space:nowrap"><tr>
+<td>Width<td><input type="range" id="size_width" min=600 max=1050 step="1" value="750" style="width:150px;padding:0px;" onchange="size_width_onchange(this)">
+<td><input type=number id="size_width_n" style="width:65px" min=600 max=1050 value="750" onchange="size_width_n_onchange(this)">
+<td>
+<td>Height<td><input type="range" id="size_height" min=400 max=1050 step="1" value="550" style="width:150px;padding:0px;" onchange="size_width_onchange(this)">
+<td><input type=number id="size_height_n" style="width:65px" min=400 max=1050 value="550" onchange="size_width_n_onchange(this)">
+<td><button id="" onclick='proc_default()' style="font-size:13px" title="Set as default size">Default Size</button>
+<td>
+<td>Vol
+<td><input id="volume1" type="range" min="0" max="100" step="3" value="80" onchange="volume1_onchange()" style="width:95px;padding:0px;" title="Audio Volume">
+</table>
+
+
+<iframe id="viewer" src="" style="display:none;width:780px;height:440px" frameborder=0 scrolling=no allow="autoplay; fullscreen" allowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+<tr><td>
+<table>
+<tr><td><font color=green>*Game Shortcuts</font> &nbsp;<a href="#" onclick="proc_editshortcuts();return false">Edit Game Shortcuts</a>
+<tr><td><div id="shortcuts"></div>
+<tr><td>*Useful DOS command &nbsp;<button type=button id="btn_save" disabled=true onclick='proc_save()' style="font-size:13px">Save emulator files to your computer</button>
+<tr><td>dir or dir/w - list files in a current folder, cd "folder name" - move to folder, mount - list mounted drives, z: - go to system drive<br>
+"tab" key on the command input - navigate file name, "esc" key on DOS mouse mode - escape mouse mode<br>
+config -set "cycles=4000" - default emulation speed, config -set "cycles=10000" - faster emulation speed<br>
+config -set "cycles=20000" - fastest emulation speed, config -set "sbtype=none" - sound blaster disabled
+</table>
+
+<tr><td align=center>
+
+<style>
+.gd_div{background-color:#FFFFE1;position:absolute;overflow:hidden;-webkit-box-shadow: 0 0 25px #999;-moz-box-shadow: 0 0 25px #999;box-shadow: 0 0 25px #999;}
+.fullscreenexit{position:absolute;top:10px;z-index:20000002;width:32px;height:32px;cursor:pointer;background-repeat:no-repeat;background-image:url(images/close32.png)}
+.fullscreenexit:hover{filter:brightness(110%)}
+</style>
+<div id="layer_fullscreen" style="z-index:20000000;display:none;position:absolute;background-color:black;left:0px;top:0px"></div>
+<div id="layer_fullscreenexit" class="fullscreenexit" onclick="proc_full()" style="display:none" title="Exit Fullscreen"></div>
+
+<iframe style="position:absolute;display:none" frameborder=0 id='gd_frame'></iframe>
+<div id="layer_message" class="gd_div" style="z-index:10001;display:none;"></div>
+<div id="gd_window" class="gd_div" style="z-index:10000001;display:none;"></div>
+<div id="gd_btn_login" class="gd_div" style="z-index:10000000;display:none;">
+<table>
+<tr><td align=center><button onclick="gd_login_manual()" style="font-size:20px"><img src="images/gdrive/product20.png" align="absmiddle"> Login & Authorize</button> <button onclick="gd_login_close()" style="font-size:20px">Close</button>
+<tr><td>To use this app, Please login to the Google Drive and authorize this app or website.
+<br>(Note: If your browser block or disable the third-party cookies, this login does not work correctly.)
+</table>
+</div>
+<script>
+var CLIENT_ID = '679162492491-9lr7gmk0occqrrsjsgu0ak1dleq3v0ne.apps.googleusercontent.com';
+var SCOPES = [
+	'https://www.googleapis.com/auth/drive.install',
+	'https://www.googleapis.com/auth/drive.file'
+];
+var gd_developerKey='AIzaSyDd81A0xMSbv5POmEZNzj5iU0gSIN0L38k';
+var gd_mimetype="application/octet-stream,application/zip,application/x-zip-compressed,application/x-zip";
+var gd_export_extension=[];
+var gd_state='';
+
+var gd_picker,gd_loaded,gd_pickerloaded,gd_lastprogress,gd_issupported,gd_isdownloading,gd_load_timer,gd_bloburl,gd_state2;
+var gd_loginexp=0;
+var gd_callback;
+var ismsie=false;
+var issafari=false;
+if(navigator.appName!="Netscape"){
+	if(navigator.userAgent.indexOf("MSIE")>=0) ismsie=true;
+}
+var ua = navigator.userAgent.toLowerCase(); 
+if(ua.indexOf('safari') != -1 && ua.indexOf('chrome') <0) issafari=true;
+
+function gd_btn_login2(e,callback){
+	function go(a){
+		if(a.style.display==''){
+			var x=getScrollLeft()+((getWindowWidth()-a.clientWidth) / 2);
+			var y=getScrollTop()+((getWindowHeight()-a.clientHeight) / 2);
+			a.style["border"]="1px solid #000000";
+			a.style["padding"]="10px";
+			a.style.left=x+"px";
+			a.style.top=y+"px";
+			var b=_getid("gd_frame");
+			b.style.left=x+"px";
+			b.style.top=y+"px";
+			b.style.width=a.offsetWidth+"px";
+			b.style.height=a.offsetHeight+"px";
+			b.style.display='';
+		}
+	}
+	go(_getid("gd_btn_login"));
+	go(_getid("gd_window"));	
+	setTimeout(function(){
+		go(_getid("gd_btn_login"));
+		go(_getid("gd_window"));	
+		if(callback)callback();
+	},10);
+	if(gfullscreendata.isfull) proc_full(true);
+}
+function gd_btn_login(isshow){
+	var a=_getid("gd_btn_login");
+	if(isshow){
+		a.style.display='';
+		gd_btn_login2();
+	}else{
+		a.style.display='none';
+		_getid("gd_frame").style.display='none';
+	}
+}
+function gd_login_close(){
+	gd_btn_login(false);
+	gd_state='';
+}
+function gd_login_manual(){
+	var p={'client_id': CLIENT_ID, 'scope': SCOPES.join(' '), 'immediate': false};
+	if(gd_userId){p['login_hint']=gd_userId;p['authuser']=-1;}
+	gapi.auth.authorize(p, function (authResult){ 
+		if (authResult && !authResult.error){
+			gd_loginexp=(new Date()).getTime()+parseInt(authResult.expires_in*0.7*1000);
+			gd_btn_login(false);gd_info();
+			show_message("Login ok!!");
+			if(gd_callback) gd_callback(true);
+			else gd_open_state(true);
+		}else{
+			gd_btn_login(true);
+			show_message("Login failed!!");
+		}
+	});
+}
+function gd_login(callback,react){
+	if(gd_loginexp==0 || gd_loginexp<(new Date()).getTime()){
+	}else{
+		callback(true);
+		return;
+	}
+	var p={'client_id': CLIENT_ID, 'scope': SCOPES.join(' '), 'immediate': true};
+	if(gd_userId){p['login_hint']=gd_userId;p['authuser']=-1;}
+	gapi.auth.authorize(p, function (authResult){
+		if (authResult && !authResult.error){
+			gd_loginexp=(new Date()).getTime()+parseInt(authResult.expires_in*0.7*1000);
+			gd_btn_login(false);gd_info();
+			callback(true);
+		}else{
+			show_message("Login failed!!");
+			gd_btn_login(true);
+			callback(false);
+			if(react) gd_callback=callback;
+			else gd_callback=null;
+		}
+	});
+}
+
+function gd_loadpicker() {		
+	gapi.load('picker',{'callback': function(){
+			gd_pickerloaded=true;
+		}
+	});	
+}
+function gd_createpicker() {
+	var access_token=gapi.auth.getToken().access_token;
+	if(!access_token){
+		alert('Error!! No access token.');
+		return;
+	}
+	if(!gd_picker){
+      //var view = new google.picker.View(google.picker.ViewId.DOCS);
+	  var view2 = new google.picker.DocsView(google.picker.ViewId.DOCS);
+	  if(gd_mimetype) view2.setMimeTypes(gd_mimetype);
+	  view2.setMode(google.picker.DocsViewMode.LIST);
+
+		var view4 = new google.picker.DocsView();
+		view4.setIncludeFolders(true);
+		view4.setParent("root");
+		//view4.setMimeTypes(gd_mimetype);
+		view4.setMode(google.picker.DocsViewMode.LIST);
+		var view5 = new google.picker.View(google.picker.ViewId.RECENTLY_PICKED);
+
+      gd_picker = new google.picker.PickerBuilder()
+          //.enableFeature(google.picker.Feature.NAV_HIDDEN)
+          //.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+		  .setLocale("en") 
+		  .setAppId(CLIENT_ID.split("-")[0])
+          .setOAuthToken(access_token)
+          .addView(view2)
+		  .addView(view4)
+		  .addView(view5)
+          .addView(new google.picker.DocsUploadView())
+          .setDeveloperKey(gd_developerKey)
+          .setCallback(gd_pickercallback)
+          .build();
+	}
+	gd_picker.setVisible(true);
+}
+function gd_pickercallback(data) {
+	if (data.action == google.picker.Action.PICKED) {
+		if(data.docs && data.docs.length>0 && data.docs[0].id){
+	        var fileId = data.docs[0].id;
+			gd_loadfile(fileId);
+		}
+	}
+}
+function gd_loadfile(fileId,mresp,isfirst){
+	if(gadb){alert('Please disable the adblock for free use.');return;}
+	if(!window.URL){
+		alert("This browser does not support. Please upgrade your browser.");return;
+	}
+	if(gd_isdownloading){
+		alert("It's downloading. Please try again in a few minutes. or Cancel the current download.");
+		return;
+	}
+	_getid("downlink").innerHTML="<table><tr><td><div id='gd_progress'>Ready...</div></table>";
+
+		function go(resp){
+			function end(){
+				gd_isdownloading=false;
+				clearTimeout(messagetimer);
+				hide_message();
+				var a=_getid("downlink");
+				if(a.innerHTML && a.innerHTML.indexOf("adownlink")<0){
+					_getid("downlink").innerHTML='Open a ROM, ZIP file from local computer, Google Drive. and Mount the files.';
+				}
+			}
+			function error(s){
+				alert(s);
+			}
+			//console.log(resp);
+
+			var downloadurl;
+			if(resp.downloadUrl){
+				if(fileId) downloadurl='https://www.googleapis.com/drive/v2/files/'+resp.id+'?alt=media';//resp.downloadUrl;
+				else downloadurl=resp.downloadUrl;
+			}else if(resp.exportLinks){
+				/*for (x in resp.exportLinks){	
+					for(var i = 0; i < gd_export_extension.length; i++){    
+						if(x.toLowerCase().indexOf(gd_export_extension[i])>=0){
+							downloadurl=resp.exportLinks[x];
+							break;
+						}						
+					}					
+					if(downloadurl)break;
+				}*/
+			}
+			function setdown(url){
+				_getid("downlink").innerHTML='&nbsp;<a id="adownlink" style="font-size:17px">Download this file</a>'+getsize(resp.fileSize)+'&nbsp; Open a ROM, ZIP file from local computer, Google Drive. and Mount the files.';
+				var a=_getid("adownlink");
+				if(a){
+					a.href=(resp.downloadUrl && resp.webContentLink) || url;
+					a.target="_blank";
+					var s='';
+					if(resp.title){
+						if(resp.exportLinks) s=resp.title+'.'+resp.fileExtension;
+						else s=resp.title;
+					}else{
+						s='No Name';
+					}
+					a.download=s || "";
+					a.title=s || "";
+				}
+			}
+
+			if(fileId){
+				var accessToken = gapi.auth.getToken().access_token;
+				if(!accessToken){
+					end();
+					alert('Error!! No access token.');
+					return;
+				}
+				if(resp.fileSize && parseInt(resp.fileSize)>g_maxsize*1024*1024){
+					end();
+					if(downloadurl){
+						setdown(downloadurl+'&access_token='+encodeURIComponent(accessToken));
+					}
+					alert('The file size is too large to open. (around '+g_maxsize+' MB limit)');
+					return;
+				}
+			}
+			
+			function download(durl){
+				gd_isdownloading=true;
+				_getid("downlink").innerHTML="<table><tr><td><img src='images/wait.gif' align='absmiddle'><td><div id='gd_progress'>Downloading...</div><td>&nbsp; <a href='#' id='gd_cancel' style='font-size:15px;display:none'>Cancel</a></table>";
+				try{
+					var xhr = new XMLHttpRequest();
+					var c=_getid('gd_cancel');
+					if(c){
+						c.style.display='';
+						c.onclick=function(){
+							xhr.abort(); 
+							end();
+							return false;
+						}
+					}
+					gd_lastprogress=(new Date()).getTime();
+					xhr.open('GET', durl.split("&access_token=")[0]);
+					xhr.responseType = 'arraybuffer';
+					xhr.onprogress=function(event){
+						if(gd_lastprogress){
+							var elaspetime = new Date();
+							var dt=(elaspetime.getTime()-gd_lastprogress);
+							if(dt<200)return;
+							gd_lastprogress=elaspetime.getTime();
+						}
+						var a=event;
+						var total=a.totalSize || a.total || resp.fileSize || 0;
+						if(total>=18446744073709552000) total=0;
+						var current=a.position || a.loaded  || 0;
+						var c=_getid('gd_progress');
+						if(c) c.innerHTML='('+number_format(current)+'/'+number_format(total)+')';
+					};
+					if(durl.split("&access_token=")[1]) xhr.setRequestHeader('Authorization', 'Bearer ' + durl.split("&access_token=")[1]);
+				    xhr.onload = function(){
+						end();
+						if(this.status == 200){
+							var self=this;
+							if(isfirst){
+								_getid("downlink").innerHTML='<a id="pdownlink" style="font-size:17px" href="#">Completed. Click to play this file.</a>';
+								var c=_getid('pdownlink');
+								if(c){
+									c.onclick=function(){
+										proc_load(self.response, resp);setdown(durl);
+										return false;
+									}
+								}
+							}else{
+								proc_load(self.response, resp);setdown(durl);
+							}
+						}else{
+							error("Error (status) " + this.status + "("+this.statusText+") occurred while receiving the file.");
+						}
+					};
+					xhr.onerror = function(e){      
+						end();
+						error("Error " + e.target.status + " occurred while receiving the file.");
+					};
+					xhr.send();
+				}catch(err){
+					error(err+'\n\nor This browser does not support. Please upgrade your browser.');
+					end();
+				}
+			}
+			function upload(){
+				gd_isdownloading=true;
+				_getid("downlink").innerHTML="<table><tr><td><img src='images/wait.gif' align='absmiddle'><td><div id='gd_progress'>Downloading...</div><td>&nbsp; <a href='#' id='gd_cancel' style='font-size:15px;display:none'>Cancel</a></table>";
+				try{
+					var xhr = new XMLHttpRequest();
+					var c=_getid('gd_cancel');
+					if(c){
+						c.style.display='';
+						c.onclick=function(){
+							xhr.abort(); 
+							end();
+							return false;
+						}
+					}					
+					var uid='';
+					xhr.open('GET', 'upload.php?uid='+encodeURIComponent(uid)+'&imgurl='+encodeURIComponent(downloadurl)+'&title='+encodeURIComponent(resp.title));
+				    xhr.onload = function(){
+						end();
+						if(this.status == 200){
+							var s=trim(this.response || '');
+							if(s.indexOf("temp/")==0){
+								download(s);
+							}else{
+								error(s);
+							}
+						}else{
+							error("Error (status) " + this.status + "("+this.statusText+") occurred while receiving the file.");
+						}
+					};
+					xhr.onerror = function(e){      
+						end();
+						error("Error " + e.target.status + " occurred while receiving the file.");
+					};
+					xhr.send();
+				}catch(err){
+					error(err+'\n\nor This browser does not support. Please upgrade your browser.');
+					end();
+				}
+			}
+
+			if(downloadurl){	
+				if(fileId){
+					resp.title2='(Drive) '+resp.title;
+					download(downloadurl+'&access_token='+encodeURIComponent(accessToken));
+				}else{
+					if(resp.isdirect) download(downloadurl);
+					else upload();
+				}
+			}else{
+				end();
+				if(resp.error && resp.error.message){
+					alert(resp.error.message);
+				}else{
+					alert('Error!! Can not find a download URL.');
+				}
+			}
+		}
+
+	if(fileId){
+		gapi.client.load('drive', 'v2', function() {
+			var request = gapi.client.drive.files.get({
+				'fileId': fileId
+			});
+			request.execute(function(resp){
+				go(resp);
+			});
+		});
+	}else if(mresp){
+		go(mresp);
+	}else{		
+		alert('Error!! Can not find a file ID.');
+	}
+}
+function gd_open_picker(){
+	if(!gd_issupported){
+		alert("This browser does not support.");
+		return;
+	}
+	gd_login(function(result){
+		if(!result) return;
+		gd_createpicker();
+	},true);
+}
+function gd_open_state(force){
+	var s=gd_state;
+	if(s){
+		if(!gd_issupported){
+			gd_state='';
+			alert("This browser does not support.");
+			return;
+		}
+		s=decodeURIComponent(s);
+		try{
+			var a=JSON.parse(s);
+			var fileId;
+			if(a.ids) fileId=a.ids[0];
+			if(!fileId && a.exportIds) fileId=a.exportIds[0];
+			if(fileId){
+				gd_login(function(result){
+					if(gd_open2 && !force)return;
+					gd_open2=true;
+					if(!result) return;
+					//_getid('gd_btn_reopen').style.display='';
+					gd_state='';
+					gd_loadfile(fileId,'',true);
+				});				
+			}
+		}catch(err){
+		}
+	}
+}
+var gd_open2;
+function gd_open_state2(){
+	setTimeout(function(){
+		if(!gd_open2)gd_open_state();
+	}, 1000);
+}
+
+function gd_clientload(){
+	gd_loaded=true;
+	if (window.addEventListener){
+		window.addEventListener("resize", gd_btn_login2, false);
+	}else if (window.attachEvent){
+		window.attachEvent("onresize", gd_btn_login2);
+	}
+	gd_open_state();
+}
+	if(gd_load_timer)return;
+	if(gd_loaded && gd_pickerloaded)return;
+	gd_load_timer=setInterval(function(){
+		if(gd_loaded && gd_pickerloaded){
+			clearInterval(gd_load_timer);
+			if(callback) callback();
+		}
+	},100);
+	inject('https://apis.google.com/js/client.js?onload=gd_clientload');
+	inject('https://apis.google.com/js/api.js?onload=gd_loadpicker');	
+}
+function gd_reopen(){
+	if(gd_state2){
+		var kind="";
+		var s='?';
+		if(kind) s+='kind='+kind+'&';
+		s+='state='+encodeURIComponent(gd_state2);
+		location.href=s;
+	}
+}
+var gd_userId,gd_email;
+function gd_weburl(){
+	var s;
+	if(gd_email) s='https://drive.google.com/?authuser='+gd_email;
+	else s='https://drive.google.com/';
+	return s;
+}
+function gd_info(){
+	if(gd_email)return;
+	gapi.client.load('drive', 'v2', function(){
+		var request = gapi.client.drive.about.get();
+		request.execute(function(resp) {
+			if(resp && resp.user){
+				if(gd_email)return;
+				gd_email=resp.user.emailAddress;
+				if(gd_email){
+					var a=_getid('btn_open');
+					var b=_getid('gd_btn_reopen');
+					if(a)a.title=a.title+' ('+gd_email+')';
+					if(b)b.title=b.title+' ('+gd_email+')';
+				}				
+			}
+		});
+	});
+}
+function gd_init(){
+	gd_state2=gd_state;
+	if(!window.FileReader || !window.XMLHttpRequest || !window.URL){
+	}else{
+		gd_issupported=true;
+		if(gd_state){
+			try{
+				var a=JSON.parse(gd_state);
+				gd_userId=a.userId;
+			}catch(err){}	
+			if(window.addEventListener) window.addEventListener("load", gd_open_state2, false);
+			else if (window.attachEvent) window.attachEvent("onload", gd_open_state2);		
+		}
+	}
+}
+</script>
+
+</table>
+
+<script>
+function size_width_onchange(f,nosize){
+	var w=_getid('size_width').value;
+	var h=_getid('size_height').value;	
+	if(w<600)w=600;
+	if(w>1050)w=1050;	
+	if(h<400)h=400;
+	if(h>1050)h=1050;	
+	if(f){
+		_getid('size_width_n').value=w;
+		_getid('size_height_n').value=h;
+	}
+	if(!nosize){
+		var a=_getid('viewer');
+		a.style.width=w+'px';
+		a.style.height=h+'px';
+	}
+}
+function size_width_n_onchange(f){
+	var w=_getid('size_width_n').value;
+	var h=_getid('size_height_n').value;
+	if(w<600)w=600;
+	if(w>1050)w=1050;	
+	if(h<400)h=400;
+	if(h>1050)h=1050;	
+	_getid('size_width').value=w;
+	_getid('size_height').value=h;
+	size_width_onchange();
+}
+function proc_default(){
+	var a=_getid("viewer");
+	var ifrm=_getfrmdoc(a);
+	if(ifrm && ifrm.proc_load_dos){
+		_getid('size_width').value=640;
+		_getid('size_height').value=400;	
+	}else{
+		_getid('size_width').value=750;
+		_getid('size_height').value=550;
+	}
+	size_width_onchange(true);
+}
+
+var g_lastdata2;
+var g_lastdata=[];
+function vphistory_onchange(f){
+	if(!f.value)return;
+	for(var i = 0; i < g_lastdata.length; i++){
+		if(g_lastdata[i].id==f.value){
+			proc_load(g_lastdata[i].data, g_lastdata[i].resp,true);
+			break;
+		}
+	}
+}
+
+function _getfrmdoc(ifrm){
+	return (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+}
+function proc_load(data, resp, ishistory){
+	if(!window.WebAssembly){		
+		alert('This browser does not support WebAssembly. Please upgrade the browser.');return;
+	}
+	if(!window.URL){
+		alert("This browser does not support. Please upgrade your browser.");return;
+	}
+
+	if(gadb){alert('Please disable the adblock for free use.');return;}
+	if(resp.fileSize && parseInt(resp.fileSize)>g_maxsize*1024*1024){
+		alert('The file size is too large to open. (around '+g_maxsize+' MB limit)');
+		return;
+	}
+	_getid('msg1').innerHTML='';
+	g_lastdata2={};
+	g_lastdata2.data=data;
+	g_lastdata2.resp=resp;
+
+	var hdata;
+	if(!ishistory){
+		for(var i = 0; i < g_lastdata.length; i++){
+			if(g_lastdata[i].resp.id==resp.id){
+				if(g_lastdata[i].data) g_lastdata[i].data='';
+				g_lastdata.splice(i,1);
+				break;
+			}
+		}
+		var a={};
+		a.id=(new Date()).getTime();
+		a.data=data;
+		a.resp=resp;
+		g_lastdata.push(a);
+		hdata=a;
+		if(g_lastdata.length>5){
+			if(g_lastdata[i].data) g_lastdata[i].data='';
+			g_lastdata.splice(0,1);
+		}
+		var s='History &nbsp;<select onchange="vphistory_onchange(this)" style="width:260px">';
+		for(var i=g_lastdata.length-1;i>=0;i--){
+			s+='<option value="'+g_lastdata[i].id+'">'+henc(g_lastdata[i].resp.title2 || g_lastdata[i].resp.title || 'No Name');
+		}
+		s+='</select>';
+		_getid('vphistory').innerHTML=s;
+	}
+
+	_getid('btn_full').disabled=false;
+	_getid('btn_refresh').disabled=false;
+	_getid('btn_close').disabled=false;
+
+	var ext=getextension(g_lastdata2.resp.title);
+	var extorg=ext;
+	var flag=false;
+	for(var i=0; i <= supportexts.length-1; i++){
+		if(ext==supportexts[i].ext && ext!='zip'){
+			flag=true;
+			break;
+		}
+	}
+	if(!flag){
+		var s1='<div style="width:500px;white-space:nowrap;overflow:hidden;border:0px solid red;">'+henc(resp.title)+'</div><b>This is ZIP format or Unknown format. Select a ROM type, system:</b><br><br>';
+		var prefer=getstorage('c_prefer_ext');
+		var list=[];
+		for(var i=0; i <= supportexts.length-1; i++){
+			if(supportexts[i].hide)continue;
+			var ext2=supportexts[i].system || supportexts[i].ext;
+			s1+='<label style="cursor:pointer"><input type=radio name=gdsel value="'+i+'"';
+			if(prefer==ext2) s1+=' checked=true';
+			s1+='> '+supportexts[i].name;
+			if(supportexts[i].desc) s1+=' ('+supportexts[i].desc+')';
+			else s1+=' (*.'+supportexts[i].ext+')';
+			s1+='</label><br><br>';
+		}				
+		var gwin=_getid("gd_window");
+		gwin.innerHTML='<table><tr><td>'+s1+'<tr><td align=center><button type=button id="gd_ok" style="font-size:17px">OK</button> <button type=button id="gd_cancel" style="font-size:17px">Cancel</button></table>';
+		gwin.style.display='';
+		gd_btn_login2(false,function(){
+			_getid('gd_ok').focus();
+		});
+		function selok(){
+			gwin.style.display='none';
+			_getid("gd_frame").style.display='none';
+			var ans;
+			var radios = gwin.getElementsByTagName('input');
+			for(var i = 0; i < radios.length; i++){
+				if(radios[i].type=='radio' && radios[i].checked){
+					ans=radios[i].value;
+					break;
+				}
+			}					
+			ans=parseInt(ans);
+			if(supportexts[ans]){
+				var ext2=supportexts[ans].system || supportexts[ans].ext;
+				setstorage('c_prefer_ext',ext2);
+				ext=ext2;
+				go();
+			}else{
+				alert('No selected.');
+			}
+		}
+		var a=gwin.getElementsByTagName('label');
+		for(var i = 0; i < a.length; i++){
+			a[i].ondblclick=selok;
+		}
+		_getid('gd_ok').onclick=selok;
+		_getid('gd_cancel').onclick=function(){
+			gwin.style.display='none';
+			_getid("gd_frame").style.display='none';
+		}
+		return;
+	}
+
+	function go(){		
+		if(extorg=='zip' && !resp.unzipped && ",nes,smc,sfc,srm,gb,gbc,gba,gen,bin,smd,md,".indexOf(","+ext+",")>=0){
+			function setdata(blob){
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					if(hdata){
+						hdata.data=e.target.result;
+						hdata.resp.unzipped=true;
+					}
+					g_lastdata2.data=e.target.result;
+					g_lastdata2.resp.unzipped=true;
+					go();
+				}
+				reader.onerror=function(){
+					alert('File Read Error.');
+				}
+				reader.readAsArrayBuffer(blob);
+			}
+			jz.zip.unpack({buffer: new Uint8Array(g_lastdata2.data)}).then(function(reader){
+				if(!reader || !reader.files){
+					alert('Unzip Error. Please check the file is valid.');return;
+				}
+				for(var i=0; i <= reader.files.length-1; i++){
+					var s1=getextension(reader.files[i].filename);
+					if(",nes,smc,sfc,srm,gb,gbc,gba,gen,bin,smd,md,".indexOf(","+s1+",")>=0){
+						//readFileAsArrayBuffer error in stored zip format
+						reader.readFileAsBlob(reader.files[i].filename).then(function(blob){
+							setdata(blob);
+						});
+						return;
+					}
+				}
+				if(reader.files.length==1){
+					reader.readFileAsBlob(reader.files[0].filename).then(function(blob){
+						setdata(blob);
+					});
+					return;
+				}
+				alert('Can not find a '+ext+' ROM file in the ZIP file.');
+			});	
+			return;
+		}
+		var htmfile='';
+		_getid('btn_save').disabled=true;
+		if(ext=='nes') htmfile='emulators/Nintendo.php';
+		else if(ext=='smc' || ext=='sfc' || ext=='srm') htmfile='emulators/SuperNintendo.php';	
+		else if(ext=='gb' || ext=='gbc') htmfile='emulators/GameBoy.php';	
+		else if(ext=='gba') htmfile='emulators/GameBoyAdvance.php';		
+		else if(ext=='gen' || ext=='bin' || ext=='smd' || ext=='md') htmfile='emulators/SegaGenesis.php';		
+		else if(ext=='mame32') htmfile='emulators/MAME32.php';		
+		else if(ext=='dos'){
+			htmfile='emulators/DOS.php';		
+			_getid('btn_save').disabled=false;
+		}else{
+			alert('Not supported file format.');
+			return;
+		}
+		if(!htmfile)return;
+		var a=_getid("viewer");
+		a.style.display='';	
+		var ifrm=_getfrmdoc(a);
+		if(ifrm){
+			a.onload=function(){
+				ifrm.focus();
+			}
+			ifrm.location.replace(htmfile);		
+		}	
+	}
+	go();
+}
+
+function _gerr(s){
+	_getid('msg1').innerHTML='<font color=red>'+henc(s)+'</font>';
+}
+
+var supportexts=[{ext:'nes',name:'Nintendo'},{ext:'smc',name:'Super Nintendo',desc:'*.smc, *.sfc, *.srm'},{ext:'sfc',name:'Super Nintendo',hide:true},{ext:'srm',name:'Super Nintendo',hide:true},{ext:'gen',name:'SEGA',desc:'*.gen, *.bin, *.smd, *.md'},{ext:'bin',name:'SEGA',hide:true},{ext:'smd',name:'SEGA',hide:true},{ext:'md',name:'SEGA',hide:true},{ext:'gb',name:'GAMEBOY'},{ext:'gbc',name:'GAMEBOY COLOR'},{ext:'gba',name:'GAMEBOY ADVANCE'},{ext:'zip',system:'mame32',name:'Zipped MAME32 Game'},{ext:'zip',system:'dos',name:'Zipped DOS Game or Program'}];
+var defaultshortcuts={"Nintendo":{"START":"S","SELECT":"A","A, B":"X, Z"},"Super Nintendo":{"START":"E","SELECT":"R","A, B, X, Y, L, R":"X, Z, S, A, W, Q"},"SEGA":{"START":"ENTER","A, B, C":"A, S, D","X, Y, Z":"Q, W, E"},"GAMEBOY":{"START":"S","SELECT":"A","A, B, L, R":"X, Z, Q, W"},"MAME32":{"START":"ENTER","INSERT COIN":"num1","A, B, X, Y":"A, S, Q, W","L, L2, L3, R, R2, R3":"N, M, K, L, O, P"}};
+var gfullscreendata={};
+function proc_full(isresize,isfulloff){
+	var a=_getid("viewer");
+	var b=_getid('layer_fullscreen');
+	var c=_getid('layer_fullscreenexit');
+	function resize(){
+		var ww=getWindowWidth();
+		var wh=getWindowHeight();
+		var sl=getScrollLeft();
+		var st=getScrollTop();
+		var w=ww;
+		var h=Math.floor(ww*gfullscreendata.orgh/gfullscreendata.orgw);
+		if(h>wh){
+			h=wh;
+			w=Math.floor(wh*gfullscreendata.orgw/gfullscreendata.orgh);
+		}
+		if(isNaN(w)) w=100;
+		if(isNaN(h)) h=100;
+		var left=Math.floor((ww-w)/2)+sl;
+		var top=Math.floor((wh-h)/2)+st;		
+
+		b.style.display='';
+		b.style.width=ww+'px';
+		b.style.height=wh+'px';
+		b.style.left=sl+'px';
+		b.style.top=st+'px';
+		c.style.display='';
+		c.style.left=(sl+ww-42)+'px';
+		c.style.top=(st+10)+'px';
+
+		a.style.position='absolute';
+		a.style["z-index"]=20000001;		
+		a.style.width=w+'px';
+		a.style.height=h+'px';		
+		a.style.left=left+'px';
+		a.style.top=top+'px';
+		a.style.display='';
+	}	
+	if(gfullscreendata.isfull && isresize){
+		resize();
+		return;
+	}
+	if(isfulloff && !gfullscreendata.isfull){
+		return;
+	}	
+	if(!gfullscreendata.isfull){
+		gfullscreendata.isfull=true;
+		gfullscreendata.width=a.style.width;
+		gfullscreendata.height=a.style.height;
+		gfullscreendata.orgw=a.offsetWidth;
+		gfullscreendata.orgh=a.offsetHeight;
+		resize();
+		document.body.style.overflow='hidden';
+	}else{
+		gfullscreendata.isfull=false;
+		b.style.display='none';
+		c.style.display='none';
+		a.style.position='';
+		a.style.left='';
+		a.style.top='';
+		a.style.width=gfullscreendata.width;
+		a.style.height=gfullscreendata.height;
+		document.body.style.overflow='';
+	}
+	var ifrm=_getfrmdoc(a);
+	if(ifrm){
+		ifrm.focus();
+	}
+}
+
+function proc_close(){
+	var a=_getid("viewer");
+	var ifrm=_getfrmdoc(a);
+	if(ifrm) ifrm.location.replace('about:blank');
+	a.style.display='none';
+}
+function proc_refresh(){
+	if(g_lastdata2){
+		proc_load(g_lastdata2.data, g_lastdata2.resp, true);
+	}
+}
+function proc_save(){
+	var a=_getid("viewer");
+	var ifrm=_getfrmdoc(a);
+	if(ifrm && ifrm.proc_save){
+		ifrm.proc_save();
+	}
+}
+function volume1_onchange(){
+	var v=parseInt(_getid('volume1').value)/100;
+	var a=_getid("viewer");
+	var ifrm=_getfrmdoc(a);
+	if(ifrm && ifrm.proc_volume){
+		ifrm.proc_volume(v);
+	}
+}
+
+function proc_sample(f){
+	var filename=f.value;
+	if(!filename)return;
+	var resp={};
+	resp.id='(Sample) '+filename;
+	resp.title=filename;
+	resp.title2=resp.id;
+	resp.downloadUrl='./sample/'+filename;
+	resp.isdirect=true;
+	gd_loadfile('',resp);
+}
+
+var g_maxsize=80;
+function proc_openurl(){
+	var s1='Enter a ROM, ZIP URL. (http:// or https://)\n\nThe maximum download size is about 30 megabytes.';
+	var s=getstorage('c_lasturl') || '';
+	var surl=prompt(s1,s);			
+	if(!surl)return;
+	setstorage('c_lasturl',surl);
+
+	var name=getFileName(surl) || 'No Name';
+	var resp={};
+	resp.id='(URL) '+name;
+	resp.title=name;
+	resp.title2=resp.id;
+	resp.downloadUrl=surl;
+	gd_loadfile('',resp);
+}
+
+function handleFileSelect(files){
+	if(!window.URL){
+		alert("This browser does not support. Please upgrade your browser.");return;
+	}
+	if(!files || files.length==0) return;		
+	var f=files[0];
+	if(f.size>g_maxsize*1024*1024){
+		alert('The file size is too large to open. (around '+g_maxsize+' MB limit)');
+		return;
+	}
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var resp={};
+		resp.id='(Local) '+f.name;
+		resp.title=f.name;
+		resp.title2=resp.id;
+		resp.fileSize=f.size;
+		proc_load(e.target.result, resp);
+	}
+	reader.onerror=function(){
+		alert('File Read Error.');
+	}
+	reader.readAsArrayBuffer(f);
+}
+function init(){
+	var a=_getid('fileload1');
+	if(a){
+		a.onchange=function(e){
+			if(!e || !e.target){
+				alert("This browser does not support.");
+				return;
+			}
+			handleFileSelect(e.target.files);	
+		}
+		var s='';
+		for(var i=0; i <= supportexts.length-1; i++){
+			if(s) s+=',';
+			s+='.'+supportexts[i].ext;
+		}
+		a.setAttribute("accept",s);
+	}
+	var holder = document;
+	holder.ondragover = function (e) { 
+		_getid('divopen').className = 'hover'; 
+		try{var ua=navigator.userAgent;
+			if(ua && ua.indexOf("Chrome")>=0){					
+				if(e.originalEvent) e = e.originalEvent;
+				if(e.dataTransfer){
+					var b = e.dataTransfer.effectAllowed;
+					e.dataTransfer.dropEffect = ('move' === b || 'linkMove' === b) ? 'move' : 'copy';
+				}
+			}
+		}catch(err){}
+		return false; 
+	};
+	holder.ondragend = function(){ _getid('divopen').className = '';return false; };
+	holder.ondrop = function (e) {
+		_getid('divopen').className = '';
+		e.preventDefault();				
+		handleFileSelect(e.dataTransfer.files);
+		return false;
+	};
+
+	function keydown(e){
+		if(!e)e=window.event;
+		if(e && e.keyCode==27){
+			proc_full(false,true);
+		}
+	}
+	document.addEventListener("keydown", keydown, false);
+
+	/*document.documentElement.onmouseup=function(e){
+    	var b2;
+		if(e.target) b2 = e.target;
+		else if(e.srcElement) b2 = e.srcElement;
+		//console.log(b2.tagName);
+		if(b2.tagName=='BUTTON' || b2.tagName=='INPUT' || b2.tagName=='SELECT'){
+		}else{
+			if(getSelectionText())return;
+			var a=_getid("viewer");
+			if(a){
+				var ifrm=_getfrmdoc(a);
+				if(ifrm){
+					ifrm.focus();
+				}
+			}
+		}
+	}*/
+	
+	var a=get_optdata();
+	if(a.width!=null && a.height!=null){
+		_getid('size_width').value=a.width;
+		_getid('size_height').value=a.height;
+		size_width_onchange(true);
+	}else{
+		proc_default();
+	}
+	if(a.volume1!=null) _getid('volume1').value=a.volume1;
+
+	window.onunload=function(){
+		var a=get_optdata();
+		a.width=_getid('size_width').value;
+		a.height=_getid('size_height').value;
+		a.volume1=_getid('volume1').value;
+		setstorage("optdata",JSON.stringify(a));
+	}	
+	if(!a.shortcuts){
+		a.shortcuts=defaultshortcuts;
+		setstorage("optdata",JSON.stringify(a));
+	}
+	proc_displayshortcuts();
+}
+
+function proc_displayshortcuts(){
+	var a=get_optdata();
+	if(!a.shortcuts) a.shortcuts=defaultshortcuts;
+	var s='<table>';
+	for (var name in a.shortcuts){
+		s+='<tr><td>'+name+'<td>';
+		for (var name2 in a.shortcuts[name]){
+			s+=name2+': <font color=green>'+henc(a.shortcuts[name][name2])+'</font> &nbsp;&nbsp;';
+		}		
+	}
+	s+='<tr><td>DOS Game<td>Keyboard and Mouse</table>';
+	_getid('shortcuts').innerHTML=s;
+}
+function proc_editshortcuts(){
+	var a=get_optdata();
+	if(!a.shortcuts) a.shortcuts=defaultshortcuts;
+	var s='<table>';
+	for (var name in a.shortcuts){
+		s+='<tr><td>'+name+'<td>';
+		for (var name2 in a.shortcuts[name]){
+			var width=(defaultshortcuts[name][name2] || '').length*8;
+			if(width<60) width=60;
+			s+=name2+': <input type=text style="width:'+width+'px" data="'+(name+'|'+name2)+'" value="'+henc(a.shortcuts[name][name2])+'" spellcheck=false autocomplete="off"> &nbsp;';
+		}		
+	}
+	s+='<tr><td>DOS Game<td>Keyboard and Mouse';
+	s+='<tr><td><td><tr><td colspan=2><button id="shc_save">Save</button> <button id="shc_default">Set as Default</button> <button id="shc_cancel">Cancel</button> &nbsp;Available Keys: a~z, ctrl, alt, shift, space, enter, left, right, up, down, num1, num2...';	
+	s+='</table>';
+	_getid('shortcuts').innerHTML=s;
+
+	var a=_getid('shc_save');
+	if(a){
+		a.onclick=function(){
+			var a=get_optdata();
+			if(!a.shortcuts) a.shortcuts=defaultshortcuts;
+			var b=_getid('shortcuts').getElementsByTagName('INPUT');
+			var s,arr;
+			for(var i = 0; i < b.length; i++){
+				if(b[i].type=='text' && b[i].getAttribute("data")){
+					s=b[i].getAttribute("data");
+					arr=s.split("|");
+					a.shortcuts[arr[0]][arr[1]]=b[i].value;
+				}
+			}
+			setstorage("optdata",JSON.stringify(a));
+			proc_displayshortcuts();
+		}
+	}
+	var b=_getid('shc_cancel');
+	if(b){
+		b.onclick=function(){
+			proc_displayshortcuts();
+		}
+	}
+	var c=_getid('shc_default');
+	if(c){
+		c.onclick=function(){
+			var a=get_optdata();
+			a.shortcuts=defaultshortcuts;
+			setstorage("optdata",JSON.stringify(a));
+			proc_displayshortcuts();
+		}
+	}
+}
+function get_optdata(){
+	var s=getstorage('optdata');
+	if(!s) s='{}';
+	var a={};
+	try{
+		a=JSON.parse(s);
+	}catch(err){
+		a={};
+	}
+	if(!a)a={};
+	return a;
+}
+function getSelectionText() {
+    var text = "";
+    if (window.getSelection) {
+        text = window.getSelection().toString();
+    } else if (document.selection && document.selection.type != "Control") {
+        text = document.selection.createRange().text;
+    }
+    return text;
+}
+init();
+gd_init();
+</script>
+
+<table align=center style="margin-top:10px"><tr>
+<td><span id="bottomtitle">ⓒ 2023, Personal Game Emulators for Browser</span>
+</table>
+<br>
+
+<script src="https://storage.googleapis.com/app0126/js/bottom.js" async tos="../tos.php?app=Personal%20Game%20Emulators%20for%20Browser" sitetitle="Personal Game Emulators for Browser"></script>
+<iframe src="cache.php" style="display:none;width:0px"></iframe>
+<script src="https://storage.googleapis.com/app0126/js/compat2.js"></script>
+<script>init_compat201912_a();</script>
+<script>
+function gd_findscope(s){
+	function trim(str){return (str || '').replace(/^\s*|\s*$/g,"");}
+	var s1;
+	try{
+		if(!s) return false;
+		s=' '+s.toLowerCase()+' ';
+		for(var i = 0; i < SCOPES.length; i++){    
+			if(!SCOPES[i])continue;
+			s1=trim(SCOPES[i].split('/').pop().toLowerCase());
+			//if(s1=='drive.appfolder') s1='drive.appdata';
+			if(!/^(drive\.install|drive\.file|drive)$/.test(s1)) continue;
+			if(s.indexOf(s1+' ')<0) return false;
+		}
+	}catch(err){}
+	return true;
+}
+function init_fix_scope(){	
+	var a=window.gd_login_manual;
+	var b=window.gd_login;
+	if(!a) a=window.proc_login_manual; if(!b) b=window.proc_login;
+	if(a) a=a+''; if(b) b=b+'';
+	var ss='if (authResult && !authResult.error';
+	var ss2='if (authResult && (!authResult.error || authResult.access_token)';
+	if(a && a.indexOf(ss)>=0 && a.indexOf('gd_findscope(')<0){
+		a=a.replace(ss,'if (authResult && !authResult.error && gd_findscope(authResult.scope)');window.eval(a);
+	}else if(a && a.indexOf(ss2)>=0 && a.indexOf('gd_findscope(')<0){
+		a=a.replace(ss2,'if (authResult && (!authResult.error || authResult.access_token) && gd_findscope(authResult.scope)');window.eval(a);
+	}
+	if(b && b.indexOf(ss)>=0 && b.indexOf('gd_findscope(')<0){
+		b=b.replace(ss,'if (authResult && !authResult.error && gd_findscope(authResult.scope)');window.eval(b);
+	}else if(b && b.indexOf(ss2)>=0 && b.indexOf('gd_findscope(')<0){
+		b=b.replace(ss2,'if (authResult && (!authResult.error || authResult.access_token) && gd_findscope(authResult.scope)');window.eval(b);
+	}
+}
+init_fix_scope();
+</script>
+</body>
+</html>
